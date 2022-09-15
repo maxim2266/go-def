@@ -7,7 +7,10 @@ It locates the definition of the symbol under cursor.
 
 ### Installation Steps
 1. Make sure `Lua5.3` and `guru` are installed:
-`sudo apt install lua5.3 && go install golang.org/x/tools/cmd/guru@latest`;
+```
+go install golang.org/x/tools/cmd/guru@latest
+sudo apt install lua5.3
+```
 2. Clone this repository and `cd` to it;
 3. Either `make install` for the default installation to `$XDG_DATA_HOME/kate/tools/`, where
 `$XDG_DATA_HOME` defaults to `$HOME/.local/share`, or type `make` and then copy the file
