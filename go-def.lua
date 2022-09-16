@@ -58,7 +58,7 @@ local function ask_guru(fname, line_no, line_pos) --> string
 
 	just(src:close())
 
-	die_if(i < line_no, "file %s has only got %u lines in it", fname, i)
+	die_if(i < line_no, "file %q has only got %u lines in it", fname, i)
 
 	if s then
 		die_if(line_pos >= #s,
@@ -76,7 +76,7 @@ local function ask_guru(fname, line_no, line_pos) --> string
 end
 
 -- check parameters
-if not arg[1] or not arg[2] or not arg[3] then
+if not arg[1] or not arg[2] or not arg[3] or arg[4] then
 	die("This is a tool for Kate editor, do not use it standalone.")
 end
 
