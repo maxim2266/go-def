@@ -43,33 +43,37 @@ local function as_number(s) --> integer
 	return s | 0
 end
 
--- ask "guru" tool for definition location
-local function ask_guru(fname, line_no, line_pos) --> string
+-- get offset from line and column
+local function offset(fname, line, col) --> integer
 	-- find line
 	local n, i = 0, 0
 	local src = just(io.open(fname))
 	local s = src:read("L")
 
-	while s and i < line_no do
+	while s and i < line do
 		n = n + #s
-		s = src:read("L")
 		i = i + 1
+		s = src:read("L")
 	end
 
 	just(src:close())
 
-	die_if(i < line_no, "file %q has only got %u lines in it", fname, i)
+	die_if(i < line, "file %q has only got %u lines in it", fname, i)
 
 	if s then
-		die_if(line_pos >= #s,
-		       "invalid position %u: line %u is only %u bytes long", line_pos, line_no, #s)
+		die_if(col >= #s,
+		       "invalid column %u: line %u is only %u bytes long", col, line, #s)
 	else
-		die_if(line_pos > 0, "invalid position %u: line %u is empty", line_pos, line_no)
+		die_if(col > 0, "invalid column %u: line %u is empty", col, line)
 	end
 
-	-- ask guru
-	src = just(io.popen("guru definition " .. Q(fname) .. ":#" .. (n + line_pos)))
-	s = src:read("a")
+	return n + col
+end
+
+-- ask "guru" tool for definition location
+local function ask_guru(fname, line, col) --> string
+	local src = just(io.popen("guru definition " .. Q(fname) .. ":#" .. offset(fname, line, col)))
+	local s = src:read("a")
 
 	just(src:close())
 	return s
