@@ -31,4 +31,4 @@ INSTALL_DIR ?= $(XDG_DATA_HOME)/kate/tools
 
 install: $(BIN)
 	mkdir -p $(INSTALL_DIR)
-	cp $(BIN) $(INSTALL_DIR)
+	cp $(BIN) $(INSTALL_DIR)/

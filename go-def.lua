@@ -6,7 +6,7 @@ end
 -- fail with a message
 local function die(msg, ...)
 	if select("#", ...) > 0 then
-		msg = string.format(msg, ...)
+		msg = msg:format(...)
 	end
 
 	io.stderr:write(arg[0]:match("[^/]+$"), ": [error] ", msg, "\n")
@@ -45,7 +45,6 @@ end
 
 -- get offset from line and column
 local function offset(fname, line, col) --> integer
-	-- find line
 	local n, i = 0, 0
 	local src = just(io.open(fname))
 	local s = src:read("L")
@@ -63,8 +62,8 @@ local function offset(fname, line, col) --> integer
 	if s then
 		die_if(col >= #s,
 		       "invalid column %u: line %u is only %u bytes long", col, line, #s)
-	else
-		die_if(col > 0, "invalid column %u: line %u is empty", col, line)
+	elseif col > 0 then
+		die("invalid column %u: line %u is empty", col, line)
 	end
 
 	return n + col
